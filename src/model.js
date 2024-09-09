@@ -1,25 +1,15 @@
 import { DataTypes, Model } from 'sequelize'
 import connectToDB from './db.js'
-import util from 'util'
-
 
 const db = await connectToDB('postgresql:///animals')
 
-export class Human extends Model {
-  [util.inspect.custom]() {
-    return this.toJSON()
-  }
-
+class Human extends Model {
   getFullName() {
     return `${this.fname} ${this.lname}`
   }
 }
 
-export class Animal extends Model {
-  [util.inspect.custom]() {
-    return this.toJSON()
-  }
-}
+class Animal extends Model {}
 
 Human.init({
   human_id: {
@@ -56,7 +46,7 @@ Animal.init({
     type: DataTypes.INTEGER,
     references: {
       model: Human,
-      key: 'human_id'
+      key: 'human_id',
     },
   },
   name: {
@@ -80,5 +70,7 @@ Animal.init({
 Human.hasMany(Animal, { foreignKey: 'human_id' })
 Animal.belongsTo(Human, { foreignKey: 'human_id' })
 
+export { Human, Animal }
 export default db
+
 
